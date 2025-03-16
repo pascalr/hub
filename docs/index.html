@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hub Maison</title>
+  <style>
+    body {
+      margin: 0;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    #screen {
+      position: relative;
+    }
+    #desktop {
+      height: 100%;
+      width: 100%;
+    }
+    #desktop > a {
+      position: absolute;
+      display: block;
+    }
+    #desktop > a > img {
+      width: 100%;
+      height: 100%;
+    }
+    #sidebar {
+      display: flex;
+      flex-direction: column;
+      width: 60px;
+      height: 100vh;
+      border-right: 2px solid rgba(0,0,0,0.3);
+      background-color: rgba(0,0,0,0.5);
+    }
+    #sidebar > button {
+      background-color: inherit;
+      border-width: 0;
+      padding: 10px;
+      border-color: #392e23;
+      border-style: solid;
+    }
+    #sidebar > button > img {
+      width: 100%;
+      filter: invert(1);
+    }
+    #window {
+      display: flex;
+    }
+    #wallpaper {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      opacity: 0.8;
+      filter: blur(0.5px);
+    }
+    .iconLink {
+      text-decoration: none;
+    }
+
+    .iconLabel {
+      color: #fff;
+      text-shadow:
+        0.07em 0 2px black,
+        0 0.07em 2px black,
+        -0.07em 0 2px black,
+        0 -0.07em 2px black;
+    }
+  </style>
+</head>
+<body>
+  <img id="wallpaper" src="./wallpapers/pexels-eberhardgross-443446.jpg"></img>
+  <div id="window">
+    <div id="sidebar">
+      <button type="button"><img src="./images/727677_moon_night_star_weather_icon.svg"></img></button>
+      <button type="button"><img src="./images/3669363_dashboard_ic_icon.svg"></img></button>
+      <button type="button"><img src="./images/9004702_apps_application_app_ui_communication_icon.svg"></img></button>
+      <button type="button"><img src="./images/2203551_book_calendar_date_monthly_icon.svg"></img></button>
+      <div style="flex-grow: 1;"></div>
+      <button type="button"><img src="./images/4200472_cogwheel_configuration_gear_settings_icon.svg"></img></button>
+    </div>
+    <div id="screen">
+      <div id="desktop"></div>
+      <iframe title="Météo Environnement Canada" width="296" height="191" src="https://meteo.gc.ca/wxlink/wxlink.html?coords=45.403%2C-71.901&lang=f" allowtransparency="true" style="border: 0;"></iframe>
+    </div>
+  </div>
+</body>
+</html>
+
+<script>
+  let desktop = document.getElementById("desktop")
+  let screen = document.getElementById("screen")
+  let conf = {
+    width: 52,
+    height: 52,
+    margin: 24,
+    maxWidth: 800,
+  }
+  let links = [
+    {
+      type: "URL",
+      value: "https://meteo.gc.ca/fr/location/index.html?coords=45.403,-71.901",
+      label: "Météo",
+      icon: "1054936_weather_cloud_cloudy_sun_icon.svg",
+      x: 1,
+      y: 1
+    },
+    {
+      type: "URL",
+      value: "https://heda-server.fly.dev/",
+      label: "Recettes",
+      icon: "34652_cake_cupcake_food_muffin_icon.png",
+      x: 2,
+      y: 1
+    },
+    {
+      type: "FILE",
+      value: "2025-Calendrier-1A-FR-EN.pdf",
+      label: "Collecte",
+      icon: "48510_garbage_icon.png",
+      x: 3,
+      y: 1
+    },
+  ]
+
+  screen.style.maxWidth = `${parseInt(conf.maxWidth)}px`
+
+  for (let l of links) {
+    let el = document.createElement('a')
+    el.className = "iconLink"
+    if (l.type === "URL") {
+      console.log('HERE')
+      el.href = l.value
+    }
+    el.style.left = `${((l.x-1) * (conf.width+conf.margin*2)) + conf.margin}px`
+    el.style.top = `${((l.y-1) * (conf.height+conf.margin*2)) + conf.margin}px`
+    el.style.width = `${parseInt(conf.width)}px`
+    el.style.height = `${parseInt(conf.height)}px`
+
+    let img = document.createElement('img');
+    img.src = `./images/${l.icon}`;
+    el.appendChild(img)
+
+    let label = document.createElement('div')
+    label.className = "iconLabel"
+    label.textContent = l.label
+    el.appendChild(label)
+
+    desktop.appendChild(el)
+  }
+</script>

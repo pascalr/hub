@@ -61,17 +61,11 @@
     }
 
     .iconLabel {
-      color: #fff;
-      text-shadow:
-        0.07em 0 2px black,
-        0 0.07em 2px black,
-        -0.07em 0 2px black,
-        0 -0.07em 2px black;
+      color: #000;
     }
   </style>
 </head>
 <body>
-  <img id="wallpaper" src="./wallpapers/pexels-eberhardgross-443446.jpg"></img>
   <div id="window">
     <div id="sidebar">
       <button type="button"><img src="./images/727677_moon_night_star_weather_icon.svg"></img></button>
@@ -82,72 +76,26 @@
       <button type="button"><img src="./images/4200472_cogwheel_configuration_gear_settings_icon.svg"></img></button>
     </div>
     <div id="screen">
-      <div id="desktop"></div>
+      <div id="desktop">
+        <a class="iconLink" href="https://meteo.gc.ca/fr/location/index.html?coords=45.403,-71.901" style="left: 24px; top: 24px; width: 52px; height: 52px;">
+          <img src="./images/1054936_weather_cloud_cloudy_sun_icon.svg">
+          <div class="iconLabel">Météo</div>
+        </a>
+        <a class="iconLink" href="https://heda-server.fly.dev/" style="left: 124px; top: 24px; width: 52px; height: 52px;">
+          <img src="./images/34652_cake_cupcake_food_muffin_icon.png">
+          <div class="iconLabel">Recettes</div>
+        </a>
+        <a class="iconLink" style="left: 224px; top: 24px; width: 52px; height: 52px;">
+          <img src="./images/48510_garbage_icon.png">
+          <div class="iconLabel">Collecte</div>
+        </a>
+        <a class="iconLink" href="./p/vegetation/index.html" style="left: 324px; top: 24px; width: 52px; height: 52px;">
+          <img src="./images/plant_icon.png">
+          <div class="iconLabel">Végétation</div>
+        </a>
+      </div>
       <iframe title="Météo Environnement Canada" width="296" height="191" src="https://meteo.gc.ca/wxlink/wxlink.html?coords=45.403%2C-71.901&lang=f" allowtransparency="true" style="border: 0;"></iframe>
     </div>
   </div>
 </body>
 </html>
-
-<script>
-  let desktop = document.getElementById("desktop")
-  let screen = document.getElementById("screen")
-  let conf = {
-    width: 52,
-    height: 52,
-    margin: 24,
-    maxWidth: 800,
-  }
-  let links = [
-    {
-      type: "URL",
-      value: "https://meteo.gc.ca/fr/location/index.html?coords=45.403,-71.901",
-      label: "Météo",
-      icon: "1054936_weather_cloud_cloudy_sun_icon.svg",
-      x: 1,
-      y: 1
-    },
-    {
-      type: "URL",
-      value: "https://heda-server.fly.dev/",
-      label: "Recettes",
-      icon: "34652_cake_cupcake_food_muffin_icon.png",
-      x: 2,
-      y: 1
-    },
-    {
-      type: "FILE",
-      value: "2025-Calendrier-1A-FR-EN.pdf",
-      label: "Collecte",
-      icon: "48510_garbage_icon.png",
-      x: 3,
-      y: 1
-    },
-  ]
-
-  screen.style.maxWidth = `${parseInt(conf.maxWidth)}px`
-
-  for (let l of links) {
-    let el = document.createElement('a')
-    el.className = "iconLink"
-    if (l.type === "URL") {
-      console.log('HERE')
-      el.href = l.value
-    }
-    el.style.left = `${((l.x-1) * (conf.width+conf.margin*2)) + conf.margin}px`
-    el.style.top = `${((l.y-1) * (conf.height+conf.margin*2)) + conf.margin}px`
-    el.style.width = `${parseInt(conf.width)}px`
-    el.style.height = `${parseInt(conf.height)}px`
-
-    let img = document.createElement('img');
-    img.src = `./images/${l.icon}`;
-    el.appendChild(img)
-
-    let label = document.createElement('div')
-    label.className = "iconLabel"
-    label.textContent = l.label
-    el.appendChild(label)
-
-    desktop.appendChild(el)
-  }
-</script>

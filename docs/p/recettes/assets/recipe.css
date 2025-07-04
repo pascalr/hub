@@ -1,0 +1,34 @@
+.ing-btn {
+  float: right;
+}
+
+.recipe-title {
+  font-family: "Satisfy", cursive;
+  font-weight: bold;
+  font-size: 2.5rem;
+  margin-top: 0.5rem;
+  line-height: 1.1em;
+}
+
+.recipe-image-container {
+  width: 452px;          /* This is your fixed width */
+  max-width: 100%;       /* Shrinks responsively */
+  flex-shrink: 0;
+}
+
+/* Maintain aspect ratio using padding-bottom trick (e.g., 3:2 aspect ratio) */
+.recipe-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: calc(100% * 304 / 452); /* height/width = 2/3 for a 3:2 ratio */
+  overflow: hidden;
+}
+
+.recipe-image-wrapper img {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}

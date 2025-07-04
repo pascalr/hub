@@ -93,14 +93,6 @@
   width: auto;
 }
 
-.recipe-title {
-  font-family: "Satisfy", cursive;
-  font-weight: bold;
-  font-size: 2.5rem;
-  margin-top: 0.5rem;
-  line-height: 0px;
-}
-
 *[contenteditable="true"] {
   border: 1px solid #555;
   border-radius: 5px;

@@ -2,6 +2,20 @@
   float: right;
 }
 
+.recipe-instructions ul {
+  margin-top: 0;
+  font-style: italic;
+  padding: 0 1.5rem;
+}
+
+.recipe-instructions ul > li::marker {
+  content: "- ";
+}
+
+.recipe-instructions > * + * {
+  margin-top: 0.75em;
+}
+
 .recipe-title {
   font-family: "Satisfy", cursive;
   font-weight: bold;
@@ -31,4 +45,62 @@
   top: 50%;
   left: 0;
   transform: translateY(-50%);
+}
+
+.recipe-header {
+  display: flex;
+  gap: 40px;
+}
+
+.recipe-step::before {
+  font-weight: bold;
+  content: counter(stepnb) ". ";
+}
+
+.recipe-step {
+  counter-increment: stepnb;
+}
+
+.recipe h2 {
+  border-bottom: 1px solid black;
+  padding-left: 0.25rem;
+  font-size: 1.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.recipe {
+  min-width: 230px;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 0.5rem;
+  margin-bottom: 20em;
+}
+
+/* missing food name: color: #cc0000; */
+/* quand il y a un lien: color: #0d6efd; */
+.food-name {
+  color: #2a7ffd;
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'Satisfy';
+  src: url('../../../fonts/Satisfy/Satisfy-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Raleway';
+  src: url('../../../fonts/Raleway/Raleway-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media (max-width: 768px) {
+  .recipe-header {
+    flex-direction: column;
+    gap: 15px;
+  }
 }

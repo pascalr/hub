@@ -113,6 +113,13 @@
   text-decoration: none;
 }
 
+.recipe-detail {
+  color: gray;
+}
+.recipe-detail b{
+  color: black;
+}
+
 @font-face {
   font-family: 'Satisfy';
   src: url('../../../fonts/Satisfy/Satisfy-Regular.ttf') format('truetype');

@@ -21,6 +21,20 @@
   font-size: 0.9rem;
 }
 
+.recipe-note {
+  font-style: italic;
+}
+
+.recipe-image-credit {
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.recipe-image-credit::before {
+  content: "Crédit photo: ";
+  font-style: italic;
+}
+
 .recipe-title {
   font-family: "Satisfy", cursive;
   font-weight: bold;

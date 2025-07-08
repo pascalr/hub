@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hub Maison</title>
+  <style>
+    body {
+      margin: 0;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    #screen {
+      position: relative;
+    }
+    #desktop {
+      height: 100%;
+      width: 100%;
+    }
+    #desktop > a {
+      position: absolute;
+      display: block;
+    }
+    #desktop > a > img {
+      width: 100%;
+      height: 100%;
+    }
+    #sidebar {
+      display: flex;
+      flex-direction: column;
+      width: 60px;
+      height: 100vh;
+      border-right: 2px solid rgba(0,0,0,0.3);
+      background-color: rgba(0,0,0,0.5);
+    }
+    #sidebar > button {
+      background-color: inherit;
+      border-width: 0;
+      padding: 10px;
+      border-color: #392e23;
+      border-style: solid;
+    }
+    #sidebar > button > img {
+      width: 100%;
+      filter: invert(1);
+    }
+    #window {
+      display: flex;
+    }
+    #wallpaper {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      opacity: 0.8;
+      filter: blur(0.5px);
+    }
+    .iconLink {
+      text-decoration: none;
+    }
+
+    .iconLabel {
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <div id="window">
+    <div id="sidebar">
+      <button type="button"><img src="./images/727677_moon_night_star_weather_icon.svg"></img></button>
+      <button type="button"><img src="./images/3669363_dashboard_ic_icon.svg"></img></button>
+      <button type="button"><img src="./images/9004702_apps_application_app_ui_communication_icon.svg"></img></button>
+      <button type="button"><img src="./images/2203551_book_calendar_date_monthly_icon.svg"></img></button>
+      <div style="flex-grow: 1;"></div>
+      <button type="button"><img src="./images/4200472_cogwheel_configuration_gear_settings_icon.svg"></img></button>
+    </div>
+    <div id="screen">
+      <div id="desktop">
+        <a class="iconLink" href="https://meteo.gc.ca/fr/location/index.html?coords=45.403,-71.901" style="left: 24px; top: 24px; width: 52px; height: 52px;">
+          <img src="./images/1054936_weather_cloud_cloudy_sun_icon.svg">
+          <div class="iconLabel">Météo</div>
+        </a>
+        <a class="iconLink" href="https://heda-server.fly.dev/" style="left: 124px; top: 24px; width: 52px; height: 52px;">
+          <img src="./images/34652_cake_cupcake_food_muffin_icon.png">
+          <div class="iconLabel">Recettes</div>
+        </a>
+        <a class="iconLink" style="left: 224px; top: 24px; width: 52px; height: 52px;">
+          <img src="./images/48510_garbage_icon.png">
+          <div class="iconLabel">Collecte</div>
+        </a>
+        <a class="iconLink" href="./p/vegetation/index.html" style="left: 324px; top: 24px; width: 52px; height: 52px;">
+          <img src="./images/plant_icon.png">
+          <div class="iconLabel">Végétation</div>
+        </a>
+        <a class="iconLink" href="./p/recettes/index.html" style="left: 424px; top: 24px; width: 52px; height: 52px;">
+          <img src="./images/34652_cake_cupcake_food_muffin_icon.png">
+          <div class="iconLabel">Mes Recettes</div>
+        </a>
+      </div>
+      <iframe title="Météo Environnement Canada" width="296" height="191" src="https://meteo.gc.ca/wxlink/wxlink.html?coords=45.403%2C-71.901&lang=f" allowtransparency="true" style="border: 0;"></iframe>
+    </div>
+  </div>
+</body>
+</html>

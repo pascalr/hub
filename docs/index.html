@@ -52,6 +52,25 @@
       text-decoration: none;
       color: black;
     }
+
+    /* Right container */
+    .house-panel {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f1f1f7; /* fallback if image is transparent */
+      overflow: hidden;
+    }
+
+    .house-panel img {
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
   </style>
 </head>
 <body>
@@ -70,6 +89,13 @@
       <li><a href="">✅ Tâches</a></li>
       <li><a href="">📶 Wifi</a></li>
     </ul>
+  </div>
+  <div class="house-panel">
+    <img src="./images/facade.jpg" />
+
+    <div style="position: absolute; top: 10px; right: 10px; z-index: 10;">
+      <iframe title="Météo Environnement Canada" width="296" height="191" src="https://meteo.gc.ca/wxlink/wxlink.html?coords=45.403%2C-71.901&lang=f" allowtransparency="true" style="border: 0;"></iframe>
+    </div>
   </div>
 </body>
 </html>

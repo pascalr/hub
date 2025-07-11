@@ -1,3 +1,5 @@
+Ne fonctionnais pas tant bien, je n'ai pas voulu passer plus de temps, j'ai arrêter ça.
+
 Instructions pour configurer un DNS local pour accéder facilement au hub. Pouvoir donner un surnom qu'on met dans le navigateur accessible à partir du réseau local.
 
 Ubuntu utilise systemd-resolved par défaut pour le DNS. Il faut l'enlever en premier pour éviter des conflits.

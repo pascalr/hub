@@ -24,35 +24,6 @@
       display: flex;
     }
 
-    .legend {
-      width: 300px;
-      max-height: 100vh;
-      background: rgba(255, 255, 255, 0.85);
-      padding: 20px;
-      overflow-y: auto;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
-    }
-
-    .legend h2 {
-      margin-bottom: 15px;
-      font-size: 1.5em;
-    }
-
-    .legend ul {
-      list-style: none;
-    }
-
-    .legend li {
-      padding: 8px 0;
-      border-bottom: 1px solid #ccc;
-      font-size: 1.1em;
-    }
-
-    .legend a, .legend a:hover, .legend a:visited {
-      text-decoration: none;
-      color: black;
-    }
-
     /* Right container */
     .house-panel {
       flex: 1;
@@ -71,25 +42,161 @@
       max-height: 100%;
       object-fit: contain;
     }
+
+    .menu {
+      width: 250px;
+      max-height: 100vh;
+      overflow-y: auto;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .menu > li {
+      position: relative;
+    }
+
+    .menu > li:nth-child(even) label {
+      background: #3498db;
+    }
+
+    .menu > li:nth-child(odd) label {
+      background: #2980b9;
+    }
+
+    .menu a, .menu a:visited, .menu a:hover {
+      text-decoration: none;
+      color: black;
+    }
+
+    .menu label {
+      display: block;
+      color: white;
+      padding: 0.5em;
+      cursor: pointer;
+      font-weight: bold;
+      border: 1px solid #196c86;
+      border-bottom: 0;
+    }
+
+    .menu label::first-letter {
+      background-color: #122a71;
+      border: 2px solid black;
+      padding: 2px;
+      border-radius: 4px;
+      font-size: 1.4em;
+      margin-right: 6px;
+    }
+
+    .submenu {
+      max-height: 0;
+      overflow: hidden;
+      background: #ecf0f1;
+      transition: max-height 0.3s ease;
+    }
+
+    input[type="checkbox"] {
+      display: none;
+    }
+
+    input[type="checkbox"]:checked + label + .submenu {
+      max-height: 500px; /* enough to show content */
+    }
+
+    .submenu li {
+      padding: 8px 12px;
+      list-style-type: none;
+    }
+
+    .sebmenu-header {
+      font-weight: bold;
+      margin-left: -1em;
+    }
+
+    .section {
+      padding-left: 1em;
+    }
   </style>
 </head>
 <body>
-  <div class="legend">
-    <h2>Liens</h2>
-    <ul>
-      <li><a href="https://meteo.gc.ca/fr/location/index.html?coords=45.403,-71.901">🌤️ Météo</a></li>
-      <li><a href="">♻️ Collecte</a></li>
-      <li><a href="https://heda-server.fly.dev/">🍪 Recettes (site)</a></li>
-      <li><a href="./p/recettes/index.html">🍪 Recettes (local)</a></li>
-      <li><a href="./p/vegetation/index.html">🌿 Végétation</a></li>
-      <li><a href="">🚌 Autobus</a></li>
-      <li><a href="">📅 Calendrier</a></li>
-      <li><a href="">🧺 Inventaire</a></li>
-      <li><a href="">📝 Notes</a></li>
-      <li><a href="">✅ Tâches</a></li>
-      <li><a href="">📶 Wifi</a></li>
-    </ul>
-  </div>
+  <ul class="menu">
+    <li>
+      <input type="checkbox" id="menu1">
+      <label for="menu1">🌤️ Météo</label>
+      <ul class="submenu">
+        <div class="section">
+          <li class="sebmenu-header">Environment Canada</li>
+          <li><a href="https://meteo.gc.ca/fr/location/index.html?coords=45.403,-71.901">🌤️ Prévisions</a></li>
+          <li><a href="https://meteo.gc.ca/fr/forecast/hourly/index.html?coords=45.403,-71.901">🌤️ 24 heures</a></li>
+          <li><a href="https://meteo.gc.ca/index_f.html?layers=radar&center=46.47341971,-68.61403321&zoom=6">🌤️ Radar</a></li>
+        </div>
+        <div class="section">
+          <li class="sebmenu-header">AccuWeather</li>
+          <li><a href="https://www.accuweather.com/en/ca/sherbrooke/j1h/weather-radar/50017">🌤️ Radar</a></li>
+        </div>
+      </ul>
+    </li>
+    <li>
+      <input type="checkbox" id="menu2">
+      <label for="menu2">🏙️ Sherbrooke</label>
+      <ul class="submenu">
+        <li><a href="./files/2025-Calendrier-1A-FR-EN.pdf">♻️ Collecte</a></li>
+        <li><a href="https://www.sts.qc.ca/">🚌 Autobus</a></li>
+      </ul>
+    </li>
+    <li>
+      <input type="checkbox" id="menu3">
+      <label for="menu3">🏠 Maison</label>
+      <ul class="submenu">
+        <li><a href="">📶 Wifi</a></li>
+        <li><a href="">🛋️ Inventaire</a></li>
+        <li><a href="">📜 Papiers</a></li>
+      </ul>
+    </li>
+    <li>
+      <input type="checkbox" id="menu4">
+      <label for="menu4">🔭 Observation</label>
+      <ul class="submenu">
+        <li><a href="./p/vegetation/index.html">🌿 Végétation</a></li>
+      </ul>
+    </li>
+    <li>
+      <input type="checkbox" id="menu5">
+      <label for="menu5">🍽️ Cuisine</label>
+      <ul class="submenu">
+        <li><a href="https://heda-server.fly.dev/">🍪 Recettes (site)</a></li>
+        <li><a href="./p/recettes/index.html">🍪 Recettes (local)</a></li>
+        <li><a href="">🧺 Inventaire</a></li>
+      </ul>
+    </li>
+    <li>
+      <input type="checkbox" id="menu6">
+      <label for="menu6">📝 Notes</label>
+      <ul class="submenu">
+        <li><a href="">📅 Calendrier</a></li>
+        <li><a href="">📝 Bloc-Notes</a></li>
+        <li><a href="">✅ Tâches</a></li>
+      </ul>
+    </li>
+    <li>
+      <input type="checkbox" id="menu7">
+      <label for="menu7">👪 Famille</label>
+      <ul class="submenu">
+        <li><a href="">📷 Photos</a></li>
+        <li><a href="">📹 Vidéos</a></li>
+      </ul>
+    </li>
+    <li>
+      <input type="checkbox" id="menu8">
+      <label for="menu8">⭐ Favoris</label>
+      <ul class="submenu">
+        <li><a href="https://pascalr.github.io/">⭐ Site Pascal</a></li>
+      </ul>
+    </li>
+    <li style="flex-grow: 1;"><label style="height: 100%;"></label></li>
+  </ul>
   <div class="house-panel">
     <img src="./images/facade.jpg" />
 

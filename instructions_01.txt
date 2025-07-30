@@ -1,0 +1,10 @@
+Convert raw recipes into structured html recipes.
+
+Use "docs/p/recettes/pain_blanc_a_la_machine.html" as a template.
+
+Convert all the files in the "wip" directory ("./docs/p/recettes/wip/").
+
+Do not modify the instructions, but you can add them if they are missing.
+
+Use fractions instead of decimals. Ex: 3 1/2 t instead of 3.5 t.
+

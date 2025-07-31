@@ -81,3 +81,16 @@ footer > div > div:nth-child(even) {
 footer > div > div > div:nth-child(2) {
   padding: 0.6em 0 0.3em 0;
 }
+
+.nav {
+  height: 3rem;
+  background-color: #262323;
+  text-align: center;
+  line-height: 3rem;
+  font-size: 1.4em;
+}
+
+.nav a {
+  color: white;
+  text-decoration: none;
+}

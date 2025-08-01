@@ -25,22 +25,24 @@
     }
 
     /* Right container */
-    .house-panel {
+    .main-panel {
       flex: 1;
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #f1f1f7; /* fallback if image is transparent */
+      background-color: #f9fafb; /* fallback if image is transparent */
       overflow: hidden;
     }
 
-    .house-panel img {
-      width: auto;
-      height: auto;
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
+    .main-panel input {
+      width: 80%;
+      border-radius: 4px;
+      padding: 0.7em;
+      background-color: #f3f4f7;
+      border: 1px solid #3f4042;
+      font-size: 1.1em;
+      text-align: center;
     }
 
     .menu {
@@ -59,11 +61,11 @@
     }
 
     .menu > li:nth-child(even) label {
-      background: #3498db;
+      background: #f9fafb;
     }
 
     .menu > li:nth-child(odd) label {
-      background: #2980b9;
+      background: #f3f4f6;
     }
 
     .menu a, .menu a:visited, .menu a:hover {
@@ -73,16 +75,16 @@
 
     .menu label {
       display: block;
-      color: white;
+      color: black;
       padding: 0.5em;
       cursor: pointer;
       font-weight: bold;
-      border: 1px solid #196c86;
+      border: 1px solid #d1d5dc;
       border-bottom: 0;
     }
 
     .menu label::first-letter {
-      background-color: #122a71;
+      background-color: #353b46;
       border: 2px solid black;
       padding: 2px;
       border-radius: 4px;
@@ -210,8 +212,8 @@
     </li>
     <li style="flex-grow: 1;"><label style="height: 100%;"></label></li>
   </ul>
-  <div class="house-panel">
-    <img src="./images/facade.jpg" />
+  <div class="main-panel">
+    <input type="text" placeholder="Demander..." />
 
     <div style="position: absolute; top: 10px; right: 10px; z-index: 10;">
       <iframe title="Météo Environnement Canada" width="296" height="191" src="https://meteo.gc.ca/wxlink/wxlink.html?coords=45.403%2C-71.901&lang=f" allowtransparency="true" style="border: 0;"></iframe>

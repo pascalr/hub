@@ -25,7 +25,7 @@
     }
 
     /* Right container */
-    .main-panel {
+    #main-panel {
       flex: 1;
       position: relative;
       display: flex;
@@ -35,7 +35,7 @@
       overflow: hidden;
     }
 
-    .main-panel input {
+    #main-panel input {
       width: 80%;
       border-radius: 4px;
       padding: 0.7em;
@@ -124,7 +124,7 @@
   </style>
 </head>
 <body>
-  <ul class="menu">
+  <ul id="sidebar_menu" class="menu">
     <li>
       <input type="checkbox" id="menu1">
       <label for="menu1">🌤️ Météo</label>
@@ -213,12 +213,15 @@
     </li>
     <li style="flex-grow: 1;"><label style="height: 100%;"></label></li>
   </ul>
-  <div class="main-panel">
+  <div id="main-panel">
     <input type="text" placeholder="Demander..." />
 
     <div style="position: absolute; top: 10px; right: 10px; z-index: 10;">
       <iframe title="Météo Environnement Canada" width="296" height="191" src="https://meteo.gc.ca/wxlink/wxlink.html?coords=45.403%2C-71.901&lang=f" allowtransparency="true" style="border: 0;"></iframe>
     </div>
   </div>
+
+  <script src="./src/hub.js"></script>
+  <script src="./src/plugins/weather/weather.js"></script>
 </body>
 </html>

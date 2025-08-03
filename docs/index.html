@@ -121,6 +121,26 @@
     .section {
       padding-left: 1em;
     }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #adacb0;
+      color: white;
+    }
+    .toolbar button {
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+    .toolbar svg {
+      width: 24px;
+      height: 24px;
+      fill: white;
+    }
   </style>
 </head>
 <body>
@@ -129,6 +149,12 @@
       <input type="checkbox" id="menu1">
       <label for="menu1">🌤️ Météo</label>
       <ul class="submenu">
+        <div class="toolbar">
+          <button title="Dashboard"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8v-10h-8v10zm0-18v6h8V3h-8z"/></svg></button>
+          <div style="flex-grow: 1;"></div>
+          <button title="Edit"><img src="./images/pen.svg" alt="Pen Icon" width="24" height="24"></button>
+          <button title="Settings"><img src="./images/gear.svg"></button>
+        </div>
         <div class="section">
           <li class="sebmenu-header">Environment Canada</li>
           <li><a href="https://meteo.gc.ca/fr/location/index.html?coords=45.403,-71.901">🌤️ Prévisions</a></li>

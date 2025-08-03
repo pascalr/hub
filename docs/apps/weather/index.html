@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Météo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    h2 {
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+      color: #304a6a;
+    }
+
+    li {
+      padding: 8px 12px;
+      list-style-type: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div style="margin-left: 1em;">
+    <h2>Environment Canada</h2>
+
+    <ul>
+      <li><a href="https://meteo.gc.ca/fr/location/index.html?coords=45.403,-71.901">🌤️ Prévisions</a></li>
+      <li><a href="https://meteo.gc.ca/fr/forecast/hourly/index.html?coords=45.403,-71.901">🌤️ 24 heures</a></li>
+      <li><a href="https://meteo.gc.ca/index_f.html?layers=radar&center=46.47341971,-68.61403321&zoom=6">📡 Radar</a></li>
+    </ul>
+
+    <h2>AccuWeather</h2>
+
+    <ul>
+      <li><a href="https://www.accuweather.com/en/ca/sherbrooke/j1h/weather-radar/50017">📡 Radar</a></li>
+    </ul>
+  </div>
+
+  <div style="position: absolute; top: 10px; right: 10px; z-index: 10;">
+    <iframe title="Météo Environnement Canada" width="296" height="191" src="https://meteo.gc.ca/wxlink/wxlink.html?coords=45.403%2C-71.901&lang=f" allowtransparency="true" style="border: 0;"></iframe>
+  </div>
+</body>
+</html>

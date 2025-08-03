@@ -130,6 +130,9 @@
       height: 24px;
       fill: white;
     }
+    li.active {
+      background-color: #d0d9e6;
+    }
   </style>
 </head>
 <body>
@@ -138,7 +141,7 @@
       <input type="checkbox" id="menu7">
       <label for="menu7">📦 Applications</label>
       <ul class="submenu">
-        <li><a href="./apps/ai/index.html">🤖 IA</a></li>
+        <li><a href="./apps/ai/index.html" id="home-page">🤖 IA</a></li>
         <li><a href="./apps/weather/index.html">🌤️ Météo</a></li>
         <li><a href="">📅 Calendrier</a></li>
         <li><a href="./p/recettes/index.html">🍪 Recettes</a></li>
@@ -212,10 +215,15 @@
       links.forEach(link => {
         link.addEventListener("click", function (e) {
           e.preventDefault();
+          document.querySelectorAll("li.active").forEach(p => p.className = "");
+          this.parentElement.className = "active"
           iframe.src = this.href;
         });
       });
-    });
+
+      let home = document.getElementById("home-page")
+      if (home && home.tagName === 'A') { home.click(); }
+      });
   </script>
 </body>
 </html>

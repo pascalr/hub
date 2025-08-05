@@ -166,6 +166,8 @@
           <li><a href="">📹 Vidéos</a></li>
           <li><a href="">✅ Tâches</a></li>
           <li><a href="./p/accords/index.html">🎸 Accords</a></li>
+          <li><a href="">🎨 Apparence</a></li>
+          <li><a href="">⚙️ Configuration</a></li>
         </ul>
       </li>
       <li>
@@ -211,13 +213,6 @@
           </div>
         </ul>
       </li>
-      <li>
-        <input type="checkbox" id="menu12">
-        <label for="menu12">⚙️ Configuration</label>
-        <ul class="submenu">
-          <li><a href="https://pascalr.github.io/">⭐ Site Pascal</a></li>
-        </ul>
-      </li>
       <li style="flex-grow: 1;"><label style="height: 100%;"></label></li>
     </ul>
     <div id="main-panel">
@@ -231,17 +226,41 @@
       const iframe = document.getElementById("iframe");
     
       links.forEach(link => {
+
+        // Convert links to absolute URLs so when pushState changes URL, it doesn't change relative to that.
+        const absoluteUrl = new URL(link.href, window.location.origin).pathname;
+        link.href = absoluteUrl
+
         link.addEventListener("click", function (e) {
           e.preventDefault();
           document.querySelectorAll("li.active").forEach(p => p.className = "");
           this.parentElement.className = "active"
           iframe.src = this.href;
+          history.pushState({ iframeSrc: this.href }, '', this.href); // Update URL
         });
       });
 
-      let home = document.getElementById("home-page")
-      if (home && home.tagName === 'A') { home.click(); }
+      // Load iframe based on URL at page load
+      const currentPath = window.location.pathname;
+
+      // Optional: set a default page if root
+      if (currentPath === '/' || currentPath === '') {
+        let home = document.getElementById("home-page")
+        if (home && home.tagName === 'A') { home.click(); }
+        //iframe.src = links[0]?.href || '';
+        //history.replaceState({ iframeSrc: iframe.src }, '', links[0]?.getAttribute('href'));
+      } else {
+        iframe.src = currentPath;
+        history.replaceState({ iframeSrc: currentPath }, '', currentPath);
+      }
+
+      // Back/Forward navigation
+      window.addEventListener("popstate", function (event) {
+        if (event.state && event.state.iframeSrc) {
+          iframe.src = event.state.iframeSrc;
+        }
       });
+    });
   </script>
 </body>
 </html>

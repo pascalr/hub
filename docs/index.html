@@ -16,12 +16,9 @@
       font-family: sans-serif;
     }
 
-    body {
-      background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Old_map.jpg/1280px-Old_map.jpg');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
+    #trunk {
       display: flex;
+      height: 100%;
     }
 
     /* Right container */
@@ -133,78 +130,99 @@
     li.active {
       background-color: #d0d9e6;
     }
+
+    .nav {
+      background-color: #212529;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+    }
+    .nav a.button {
+      background-color: #373a3c;
+      color: white;
+      text-decoration: none;
+      padding: 10px 16px;
+      font-size: 16px;
+      border-radius: 4px;
+      display: inline-block;
+    }
   </style>
 </head>
 <body>
-  <ul id="sidebar_menu" class="menu">
-    <li>
-      <input type="checkbox" id="menu7">
-      <label for="menu7">📦 Applications</label>
-      <ul class="submenu">
-        <li><a href="./apps/ai/index.html" id="home-page">🤖 IA</a></li>
-        <li><a href="./apps/weather/index.html">🌤️ Météo</a></li>
-        <li><a href="">📅 Calendrier</a></li>
-        <li><a href="./p/recettes/index.html">🍪 Recettes</a></li>
-        <li><a href="">📷 Photos</a></li>
-        <li><a href="">📹 Vidéos</a></li>
-        <li><a href="">✅ Tâches</a></li>
-        <li><a href="./p/accords/index.html">🎸 Accords</a></li>
-      </ul>
-    </li>
-    <li>
-      <input type="checkbox" id="menu2">
-      <label for="menu2">🏙️ Ville</label>
-      <ul class="submenu">
-        <li><a href="./files/2025-Calendrier-1A-FR-EN.pdf">♻️ Collecte</a></li>
-        <li><a href="https://www.sts.qc.ca/">🚌 Autobus</a></li>
-      </ul>
-    </li>
-    <li>
-      <input type="checkbox" id="menu3">
-      <label for="menu3">🏠 Maison</label>
-      <ul class="submenu">
-        <li><a href="">📶 Wifi</a></li>
-        <li><a href="">🛋️ Inventaire</a></li>
-        <li><a href="">📜 Papiers</a></li>
-      </ul>
-    </li>
-    <li>
-      <input type="checkbox" id="menu4">
-      <label for="menu4">📝 Pages</label>
-      <ul class="submenu">
-        <li><a href="./p/vegetation/index.html">🌿 Végétation</a></li>
-      </ul>
-    </li>
-    <li>
-      <input type="checkbox" id="menu11">
-      <label for="menu11">📁 Fichiers</label>
-      <ul class="submenu">
-        <li><a>TODO: Use js to update this menu automatically</a></li>
-      </ul>
-    </li>
-    <li>
-      <input type="checkbox" id="menu8">
-      <label for="menu8">⭐ Favoris</label>
-      <ul class="submenu">
-        <li><a href="https://pascalr.github.io/">⭐ Site Pascal</a></li>
-        <div class="section">
-          <li class="sebmenu-header">Streaming</li>
-          <li><a href="https://www.primevideo.com/"><img src="./images/prime_video_favicon.png"> Prime Video</a></li>
-          <li><a href="https://www.netflix.com/ca/"><img src="./images/netflix.ico" width="18"> Netflix</a></li>
-        </div>
-      </ul>
-    </li>
-    <li>
-      <input type="checkbox" id="menu12">
-      <label for="menu12">⚙️ Configuration</label>
-      <ul class="submenu">
-        <li><a href="https://pascalr.github.io/">⭐ Site Pascal</a></li>
-      </ul>
-    </li>
-    <li style="flex-grow: 1;"><label style="height: 100%;"></label></li>
-  </ul>
-  <div id="main-panel">
-    <iframe id="iframe" style="width: 100%; height: 100%; border: 0;"></iframe>
+  <div class="nav">
+    <a href="../../index.html" class="button">↑ Retour</a>
+  </div>
+  <div id="trunk">
+    <ul id="sidebar_menu" class="menu">
+      <li>
+        <input type="checkbox" id="menu7">
+        <label for="menu7">📦 Applications</label>
+        <ul class="submenu">
+          <li><a href="./apps/ai/index.html" id="home-page">🤖 IA</a></li>
+          <li><a href="./apps/weather/index.html">🌤️ Météo</a></li>
+          <li><a href="">📅 Calendrier</a></li>
+          <li><a href="./p/recettes/index.html">🍪 Recettes</a></li>
+          <li><a href="">📷 Photos</a></li>
+          <li><a href="">📹 Vidéos</a></li>
+          <li><a href="">✅ Tâches</a></li>
+          <li><a href="./p/accords/index.html">🎸 Accords</a></li>
+        </ul>
+      </li>
+      <li>
+        <input type="checkbox" id="menu2">
+        <label for="menu2">🏙️ Ville</label>
+        <ul class="submenu">
+          <li><a href="./files/2025-Calendrier-1A-FR-EN.pdf">♻️ Collecte</a></li>
+          <li><a href="https://www.sts.qc.ca/">🚌 Autobus</a></li>
+        </ul>
+      </li>
+      <li>
+        <input type="checkbox" id="menu3">
+        <label for="menu3">🏠 Maison</label>
+        <ul class="submenu">
+          <li><a href="">📶 Wifi</a></li>
+          <li><a href="">🛋️ Inventaire</a></li>
+          <li><a href="">📜 Papiers</a></li>
+        </ul>
+      </li>
+      <li>
+        <input type="checkbox" id="menu4">
+        <label for="menu4">📝 Pages</label>
+        <ul class="submenu">
+          <li><a href="./p/vegetation/index.html">🌿 Végétation</a></li>
+        </ul>
+      </li>
+      <li>
+        <input type="checkbox" id="menu11">
+        <label for="menu11">📁 Fichiers</label>
+        <ul class="submenu">
+          <li><a>TODO: Use js to update this menu automatically</a></li>
+        </ul>
+      </li>
+      <li>
+        <input type="checkbox" id="menu8">
+        <label for="menu8">⭐ Favoris</label>
+        <ul class="submenu">
+          <li><a href="https://pascalr.github.io/">⭐ Site Pascal</a></li>
+          <div class="section">
+            <li class="sebmenu-header">Streaming</li>
+            <li><a href="https://www.primevideo.com/"><img src="./images/prime_video_favicon.png"> Prime Video</a></li>
+            <li><a href="https://www.netflix.com/ca/"><img src="./images/netflix.ico" width="18"> Netflix</a></li>
+          </div>
+        </ul>
+      </li>
+      <li>
+        <input type="checkbox" id="menu12">
+        <label for="menu12">⚙️ Configuration</label>
+        <ul class="submenu">
+          <li><a href="https://pascalr.github.io/">⭐ Site Pascal</a></li>
+        </ul>
+      </li>
+      <li style="flex-grow: 1;"><label style="height: 100%;"></label></li>
+    </ul>
+    <div id="main-panel">
+      <iframe id="iframe" style="width: 100%; height: 100%; border: 0;"></iframe>
+    </div>
   </div>
 
   <script>

@@ -226,40 +226,39 @@
       const iframe = document.getElementById("iframe");
     
       links.forEach(link => {
-
-        // Convert links to absolute URLs so when pushState changes URL, it doesn't change relative to that.
-        const absoluteUrl = new URL(link.href, window.location.origin).pathname;
-        link.href = absoluteUrl
-
         link.addEventListener("click", function (e) {
           e.preventDefault();
           document.querySelectorAll("li.active").forEach(p => p.className = "");
           this.parentElement.className = "active"
-          iframe.src = this.href;
-          history.pushState({ iframeSrc: this.href }, '', this.href); // Update URL
+          let href = this.getAttribute("href");
+          location.hash = href;
+          iframe.src = href;
         });
       });
 
-      // Load iframe based on URL at page load
-      const currentPath = window.location.pathname;
+      function loadFromHash() {
+        // Remove the leading '#' and decode URI
+        let page = location.hash ? decodeURIComponent(location.hash.substring(1)) : null;
 
-      // Optional: set a default page if root
-      if (currentPath === '/' || currentPath === '') {
-        let home = document.getElementById("home-page")
-        if (home && home.tagName === 'A') { home.click(); }
-        //iframe.src = links[0]?.href || '';
-        //history.replaceState({ iframeSrc: iframe.src }, '', links[0]?.getAttribute('href'));
-      } else {
-        iframe.src = currentPath;
-        history.replaceState({ iframeSrc: currentPath }, '', currentPath);
+        // if (!page) {
+        //   // Default page if no hash
+        //   page = links[0]?.getAttribute("href") || '';
+        //   location.hash = page; // set hash so URL updates
+        // }
+
+        if (page) {
+          iframe.src = page;
+        }
       }
 
-      // Back/Forward navigation
-      window.addEventListener("popstate", function (event) {
-        if (event.state && event.state.iframeSrc) {
-          iframe.src = event.state.iframeSrc;
-        }
-      });
+      // Listen for hash changes (back/forward buttons or manual changes)
+      window.addEventListener("hashchange", loadFromHash);
+
+      // Initial load from current hash
+      loadFromHash();
+
+      let home = document.getElementById("home-page")
+      if (home && home.tagName === 'A') { home.click(); }
     });
   </script>
 </body>

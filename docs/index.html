@@ -30,37 +30,47 @@
       justify-content: center;
       background-color: #f9fafb; /* fallback if image is transparent */
       overflow: hidden;
+      height: 100%;
     }
 
-    .menu {
+    #sidebar {
       width: 250px;
-      max-height: 100vh;
+      height: calc(100vh - 3.5em);
       overflow-y: auto;
       list-style: none;
       padding: 0;
       margin: 0;
       display: flex;
       flex-direction: column;
+      position: fixed;
+      left: -250px;
+      top: 3.5em;
+      transition: left 0.3s ease;
+      z-index: 990;
     }
 
-    .menu > li {
+    #sidebar.show {
+      left: 0;
+    }
+
+    #sidebar > li {
       position: relative;
     }
 
-    .menu > li:nth-child(even) label {
+    #sidebar > li:nth-child(even) label {
       background: #f9fafb;
     }
 
-    .menu > li:nth-child(odd) label {
+    #sidebar > li:nth-child(odd) label {
       background: #f3f4f6;
     }
 
-    .menu a, .menu a:visited, .menu a:hover {
+    #sidebar a, #sidebar a:visited, #sidebar a:hover {
       text-decoration: none;
       color: black;
     }
 
-    .menu label {
+    #sidebar label {
       display: block;
       color: black;
       padding: 0.5em;
@@ -70,7 +80,7 @@
       border-bottom: 0;
     }
 
-    .menu label::first-letter {
+    #sidebar label::first-letter {
       background-color: #353b46;
       border: 2px solid black;
       padding: 2px;
@@ -133,97 +143,110 @@
 
     .nav {
       background-color: #212529;
-      padding: 10px;
+      height: 3.5em;
       display: flex;
       align-items: center;
+      gap: 0.5em;
     }
     .nav a.button {
       background-color: #373a3c;
       color: white;
       text-decoration: none;
-      padding: 10px 16px;
+      padding: 8px 16px;
       font-size: 16px;
       border-radius: 4px;
       display: inline-block;
+    }
+
+    #toggle-sidebar {
+      font-size: 24px;
+      cursor: pointer;
+      background: none;
+      color: white;
+      padding: 0 0.4em 0.2em 0.4em;
+      border: 1px solid white;
+      margin: 0.2em 0.5em;
+      border-radius: 5px;
     }
   </style>
 </head>
 <body>
   <div class="nav">
+    <button id="toggle-sidebar">☰</button>
     <a href="../../index.html" class="button">↑ Retour</a>
   </div>
-  <div id="trunk">
-    <ul id="sidebar_menu" class="menu">
-      <li>
-        <input type="checkbox" id="menu7">
-        <label for="menu7">📦 Applications</label>
-        <ul class="submenu">
-          <li><a href="./apps/ai/index.html" id="home-page">🤖 IA</a></li>
-          <li><a href="./apps/weather/index.html">🌤️ Météo</a></li>
-          <li><a href="">📅 Calendrier</a></li>
-          <li><a href="./p/recettes/index.html">🍪 Recettes</a></li>
-          <li><a href="">📷 Photos</a></li>
-          <li><a href="">📹 Vidéos</a></li>
-          <li><a href="">✅ Tâches</a></li>
-          <li><a href="./p/accords/index.html">🎸 Accords</a></li>
-          <li><a href="">🎨 Apparence</a></li>
-          <li><a href="">⚙️ Configuration</a></li>
-        </ul>
-      </li>
-      <li>
-        <input type="checkbox" id="menu2">
-        <label for="menu2">🏙️ Ville</label>
-        <ul class="submenu">
-          <li><a href="./files/2025-Calendrier-1A-FR-EN.pdf">♻️ Collecte</a></li>
-          <li><a href="https://www.sts.qc.ca/">🚌 Autobus</a></li>
-        </ul>
-      </li>
-      <li>
-        <input type="checkbox" id="menu3">
-        <label for="menu3">🏠 Maison</label>
-        <ul class="submenu">
-          <li><a href="">📶 Wifi</a></li>
-          <li><a href="">🛋️ Inventaire</a></li>
-          <li><a href="">📜 Papiers</a></li>
-        </ul>
-      </li>
-      <li>
-        <input type="checkbox" id="menu4">
-        <label for="menu4">📝 Pages</label>
-        <ul class="submenu">
-          <li><a href="./p/vegetation/index.html">🌿 Végétation</a></li>
-        </ul>
-      </li>
-      <li>
-        <input type="checkbox" id="menu11">
-        <label for="menu11">📁 Fichiers</label>
-        <ul class="submenu">
-          <li><a>TODO: Use js to update this menu automatically</a></li>
-        </ul>
-      </li>
-      <li>
-        <input type="checkbox" id="menu8">
-        <label for="menu8">⭐ Favoris</label>
-        <ul class="submenu">
-          <li><a href="https://pascalr.github.io/">⭐ Site Pascal</a></li>
-          <div class="section">
-            <li class="sebmenu-header">Streaming</li>
-            <li><a href="https://www.primevideo.com/"><img src="./images/prime_video_favicon.png"> Prime Video</a></li>
-            <li><a href="https://www.netflix.com/ca/"><img src="./images/netflix.ico" width="18"> Netflix</a></li>
-          </div>
-        </ul>
-      </li>
-      <li style="flex-grow: 1;"><label style="height: 100%;"></label></li>
-    </ul>
-    <div id="main-panel">
-      <iframe id="iframe" style="width: 100%; height: 100%; border: 0;"></iframe>
-    </div>
+  <ul id="sidebar" class="menu">
+    <li>
+      <input type="checkbox" id="menu7">
+      <label for="menu7">📦 Applications</label>
+      <ul class="submenu">
+        <li><a href="./apps/ai/index.html" id="home-page">🤖 IA</a></li>
+        <li><a href="./apps/weather/index.html">🌤️ Météo</a></li>
+        <li><a href="">📅 Calendrier</a></li>
+        <li><a href="./p/recettes/index.html">🍪 Recettes</a></li>
+        <li><a href="">📷 Photos</a></li>
+        <li><a href="">📹 Vidéos</a></li>
+        <li><a href="">✅ Tâches</a></li>
+        <li><a href="./p/accords/index.html">🎸 Accords</a></li>
+        <li><a href="">🎨 Apparence</a></li>
+        <li><a href="">⚙️ Configuration</a></li>
+      </ul>
+    </li>
+    <li>
+      <input type="checkbox" id="menu2">
+      <label for="menu2">🏙️ Ville</label>
+      <ul class="submenu">
+        <li><a href="./files/2025-Calendrier-1A-FR-EN.pdf">♻️ Collecte</a></li>
+        <li><a href="https://www.sts.qc.ca/">🚌 Autobus</a></li>
+      </ul>
+    </li>
+    <li>
+      <input type="checkbox" id="menu3">
+      <label for="menu3">🏠 Maison</label>
+      <ul class="submenu">
+        <li><a href="">📶 Wifi</a></li>
+        <li><a href="">🛋️ Inventaire</a></li>
+        <li><a href="">📜 Papiers</a></li>
+      </ul>
+    </li>
+    <li>
+      <input type="checkbox" id="menu4">
+      <label for="menu4">📝 Pages</label>
+      <ul class="submenu">
+        <li><a href="./p/vegetation/index.html">🌿 Végétation</a></li>
+      </ul>
+    </li>
+    <li>
+      <input type="checkbox" id="menu11">
+      <label for="menu11">📁 Fichiers</label>
+      <ul class="submenu">
+        <li><a>TODO: Use js to update this menu automatically</a></li>
+      </ul>
+    </li>
+    <li>
+      <input type="checkbox" id="menu8">
+      <label for="menu8">⭐ Favoris</label>
+      <ul class="submenu">
+        <li><a href="https://pascalr.github.io/">⭐ Site Pascal</a></li>
+        <div class="section">
+          <li class="sebmenu-header">Streaming</li>
+          <li><a href="https://www.primevideo.com/"><img src="./images/prime_video_favicon.png"> Prime Video</a></li>
+          <li><a href="https://www.netflix.com/ca/"><img src="./images/netflix.ico" width="18"> Netflix</a></li>
+        </div>
+      </ul>
+    </li>
+    <li style="flex-grow: 1;"><label style="height: 100%;"></label></li>
+  </ul>
+  <div id="main-panel">
+    <iframe id="iframe" style="width: 100%; height: 100%; border: 0;"></iframe>
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const links = document.querySelectorAll("ul.submenu li a");
       const iframe = document.getElementById("iframe");
+      const toggleBtn = document.getElementById('toggle-sidebar');
+      const sidebar = document.getElementById('sidebar');
     
       links.forEach(link => {
         link.addEventListener("click", function (e) {
@@ -233,6 +256,7 @@
           let href = this.getAttribute("href");
           location.hash = href;
           iframe.src = href;
+          sidebar.classList.toggle('show');
         });
       });
 
@@ -259,6 +283,10 @@
 
       let home = document.getElementById("home-page")
       if (home && home.tagName === 'A') { home.click(); }
+
+      toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('show');
+      });
     });
   </script>
 </body>

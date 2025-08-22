@@ -1,1 +1,18 @@
 *.swp
+*~
+
+# For Android Studio
+Raiatea/.idea/
+*.iml
+Raiatea/build/
+Raiatea/app/release/
+Raiatea/app/debug/
+Raiatea/.gradle/
+!Raiatea/gradle/wrapper/gradle-wrapper.jar
+*.log
+*.temp
+*.jks
+*.keystore
+Raiatea/local.properties
+Raiatea/.cxx/
+Raiatea/obj/

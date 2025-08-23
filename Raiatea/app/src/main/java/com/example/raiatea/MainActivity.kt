@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
         webSettings.javaScriptEnabled = true
 
         webView.webViewClient = WebViewClient()
-        webView.loadUrl("http://192.168.0.117:8000")
+        webView.loadUrl("file:///android_asset/index.html");
+        //webView.loadUrl("http://192.168.0.117:8000")
     }
 }

@@ -1,5 +1,6 @@
 *.swp
 *~
+docs/build
 
 # For Android Studio
 Raiatea/.idea/

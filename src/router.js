@@ -1,17 +1,24 @@
 const fs = require('fs');
 const path = require('path');
 
-const docsDir = path.join(__dirname, '..', 'docs');
+const handleMediaTree = require('./media_tree')
 
-function error(res, code, msg, debugMsg) {
-  console.error("Error code", code, ": ", msg, ', (', debugMsg, ')')
-  res.writeHead(code, {'Content-Type': 'text/plain'});
-  res.end(msg);
-}
+const {error} = require('./utils')
+
+const docsDir = path.join(__dirname, '..', 'docs');
 
 module.exports = (req, res) => {
   // Default to index.html if root is requested
   let filePath = path.join(docsDir, req.url === '/' ? 'index.html' : req.url);
+
+  // Extract pathname without query/hash
+  const url = new URL(req.url, `http://${req.headers.host}`);
+  const pathname = url.pathname;
+
+  // Check if route is exactly /media
+  if (pathname === '/media_tree') {
+    return handleMediaTree(req, res)
+  }
 
   // Prevent directory traversal attacks
   if (!filePath.startsWith(docsDir)) {
@@ -44,6 +51,10 @@ module.exports = (req, res) => {
         '.gif': 'image/gif',
         '.svg': 'image/svg+xml'
       };
+
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      //res.setHeader('X-Frame-Options', 'DENY'); I can't do this security, I am using an iframe.
+      //res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'"); TODO: Understand this. It breaks if enabled.
 
       res.writeHead(200, {'Content-Type': mimeTypes[ext] || 'application/octet-stream'});
       res.end(content);

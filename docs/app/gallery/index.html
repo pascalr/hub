@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gallery</title>
+  <style>
+    :root {
+      --gap: 12px;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 16px; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: #0b0b10; color: #eaeaf2;
+    }
+    header {
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;
+    }
+    h1 { font-size: 1.25rem; margin: 0; font-weight: 650; letter-spacing: 0.2px; }
+    .muted { opacity: 0.7; }
+    #search {
+      appearance: none; border: 1px solid #2a2a36; background: #111118; color: inherit;
+      padding: 10px 12px; border-radius: 12px; min-width: 220px;
+      outline: none; box-shadow: 0 0 0 0 rgba(0,0,0,0); transition: box-shadow .18s ease, border-color .18s ease;
+    }
+    #search:focus { border-color: #3e68ff; box-shadow: 0 0 0 4px rgba(62,104,255,.18); }
+
+    .grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: var(--gap);
+    }
+    .card {
+      background: #131320; border: 1px solid #1f1f2e; border-radius: var(--radius);
+      overflow: hidden; position: relative; transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    }
+    .card:hover { transform: translateY(-2px); border-color: #2b2b42; box-shadow: 0 6px 24px rgba(0,0,0,.35); }
+    .thumb-wrap { aspect-ratio: 4/3; display: grid; place-items: center; background: #0f0f17; }
+    img.thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .caption { padding: 10px 12px; font-size: .9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-top: 1px solid #1f1f2e; }
+
+    .status { margin-top: 8px; font-size: .95rem; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+    .empty {
+      display: none; place-items: center; text-align: center; padding: 40px; border: 1px dashed #2a2a36; border-radius: 16px; opacity: .8;
+    }
+    .empty.show { display: grid; }
+    a.card { color: inherit; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Gallery</h1>
+    <label for="search" class="sr-only">Filter by name</label>
+    <input id="search" type="search" placeholder="Filter by name…" autocomplete="off" />
+    <div id="counts" class="muted" aria-live="polite"></div>
+  </header>
+
+  <section id="empty" class="empty">No images found.</section>
+  <main id="grid" class="grid" aria-live="polite" aria-busy="true"></main>
+
+  <script>
+    // Expected JSON format from /media_list: [ { name: string, thumb: string, path: string }, ... ]
+
+    const state = { items: [], filtered: [] };
+    const grid = document.getElementById('grid');
+    const search = document.getElementById('search');
+    const counts = document.getElementById('counts');
+    const empty = document.getElementById('empty');
+
+    // Simple lazy loader using IntersectionObserver
+    const lazyObserver = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+          }
+          lazyObserver.unobserve(img);
+        }
+      }
+    }, { rootMargin: '200px' });
+
+    function render(items) {
+      grid.innerHTML = '';
+      if (!items.length) {
+        empty.classList.add('show');
+        counts.textContent = '';
+        grid.setAttribute('aria-busy', 'false');
+        return;
+      }
+      empty.classList.remove('show');
+
+      const frag = document.createDocumentFragment();
+      for (const it of items) {
+        const a = document.createElement('a');
+        a.href = it.path; // clicking opens the full image
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.className = 'card';
+        a.setAttribute('aria-label', it.name || 'image');
+
+        const thumbWrap = document.createElement('div');
+        thumbWrap.className = 'thumb-wrap';
+        const img = document.createElement('img');
+        img.className = 'thumb';
+        img.alt = it.name || '';
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.dataset.src = it.thumb; // lazy src
+        img.onerror = () => { img.alt = 'Thumbnail unavailable'; };
+
+        thumbWrap.appendChild(img);
+        a.appendChild(thumbWrap);
+
+        const caption = document.createElement('div');
+        caption.className = 'caption';
+        caption.title = it.name || '';
+        caption.textContent = it.name || '';
+        a.appendChild(caption);
+
+        frag.appendChild(a);
+        lazyObserver.observe(img);
+      }
+      grid.appendChild(frag);
+      counts.textContent = `${items.length} item${items.length !== 1 ? 's' : ''}`;
+      grid.setAttribute('aria-busy', 'false');
+    }
+
+    function applyFilter() {
+      const q = search.value.trim().toLowerCase();
+      if (!q) { state.filtered = state.items.slice(); }
+      else {
+        state.filtered = state.items.filter(x => (x.name || '').toLowerCase().includes(q));
+      }
+      render(state.filtered);
+    }
+
+    async function load() {
+      try {
+        const res = await fetch('/media_list', { headers: { 'Accept': 'application/json' } });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (!Array.isArray(data)) throw new Error('Unexpected JSON format: expected an array');
+
+        // Normalize fields defensively
+        state.items = data.map(x => ({
+          name: String(x.name ?? ''),
+          thumb: String(x.thumb ?? ''),
+          path: String(x.path ?? x.url ?? ''),
+        })).filter(x => x.thumb && x.path);
+
+        applyFilter();
+      } catch (err) {
+        console.error('Failed to load /media_list:', err);
+        empty.textContent = 'Failed to load images.';
+        empty.classList.add('show');
+        grid.setAttribute('aria-busy', 'false');
+      }
+    }
+
+    search.addEventListener('input', applyFilter);
+    load();
+  </script>
+</body>
+</html>

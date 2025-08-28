@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Media Tree Viewer</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      ul {
+        list-style-type: none;
+        padding-left: 20px;
+      }
+      li {
+        cursor: default;
+      }
+      .folder {
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .collapsed > ul {
+        display: none;
+      }
+      .loading {
+        color: gray;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Media Tree</h1>
+    <div id="tree-container" class="loading">Loading...</div>
+
+    <script>
+      async function fetchMediaTree() {
+        try {
+          const response = await fetch("/media_tree");
+          if (!response.ok) throw new Error("Failed to load media tree");
+          return await response.json();
+        } catch (err) {
+          console.error(err);
+          document.getElementById("tree-container").textContent =
+            "Error loading tree.";
+        }
+      }
+
+      function createTreeNode(node) {
+        const li = document.createElement("li");
+        if (node.t === "d") {
+          // Directory
+          li.textContent = node.n;
+          li.classList.add("folder", "collapsed");
+          const ul = document.createElement("ul");
+          if (node.c) {
+            node.c.forEach((child) => ul.appendChild(createTreeNode(child)));
+          }
+          li.appendChild(ul);
+
+          li.addEventListener("click", function (e) {
+            e.stopPropagation();
+            this.classList.toggle("collapsed");
+          });
+        } else {
+          // File
+          li.textContent = node.n;
+        }
+        return li;
+      }
+
+      async function renderTree() {
+        const data = await fetchMediaTree();
+        if (!data) return;
+
+        const container = document.getElementById("tree-container");
+        container.classList.remove("loading");
+        container.textContent = ""; // Clear loading text
+
+        const rootUl = document.createElement("ul");
+        rootUl.appendChild(createTreeNode(data));
+        container.appendChild(rootUl);
+      }
+
+      renderTree();
+    </script>
+  </body>
+</html>

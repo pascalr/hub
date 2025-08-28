@@ -1,0 +1,53 @@
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
+
+const {error} = require('./utils')
+
+const SUN_DIR = path.join(os.homedir(), 'Sun'); // TODO: Fetch this from a config file instead.
+const MEDIA_DIR = path.join(SUN_DIR, 'Media');
+
+function getFilesList(dirPath, basePath) {
+  const entries = fs.readdirSync(dirPath, { withFileTypes: true });
+  let files = [];
+
+  for (const entry of entries) {
+    const fullPath = path.join(dirPath, entry.name);
+    const relativePath = path.relative(basePath, fullPath);
+
+    if (entry.isDirectory()) {
+      // Recursively get files from subdirectory
+      files = files.concat(getFilesList(fullPath, basePath));
+    } else {
+      files.push({
+        name: entry.name,
+        path: relativePath,
+        // parent: path.dirname(relativePath)
+        // size: stats.size, // in bytes
+        // createdAt: stats.birthtime, // creation time
+        // modifiedAt: stats.mtime, // last modified
+        // isSymbolicLink: entry.isSymbolicLink(),
+        // mode: stats.mode // file permissions
+      });
+    }
+  }
+
+  return files;
+}
+
+module.exports = (req, res) => {
+  try {
+
+    if (!fs.existsSync(MEDIA_DIR)) {
+      return error(res, 500, "Internal server config error. Missing Media directory.", MEDIA_DIR)
+    }
+
+    const files = getFilesList(fullPath, BASE_DIR);
+
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(files, null, 2));
+
+  } catch (error) {
+    return error(res, 500, error.message)
+  }
+}

@@ -28,11 +28,12 @@ function getCacheFileName(filePath, size = '200x200') {
 async function getThumbnail(filePath, size = '200x200') {
   return new Promise((resolve, reject) => {
 
-    const cacheFile = path.join(CACHE_DIR, getCacheFileName(filePath, size));
+    const filename = getCacheFileName(filePath, size);
+    const cacheFile = path.join(CACHE_DIR, filename);
 
     // Check if cached version exists
     if (fs.existsSync(cacheFile)) {
-      return resolve(cacheFile);
+      return resolve(filename);
     }
 
     // If not, create a copy and resize it
@@ -42,7 +43,7 @@ async function getThumbnail(filePath, size = '200x200') {
       if (error) {
         return reject(new Error(`Failed to create thumbnail: ${stderr || error.message}`));
       }
-      resolve(cacheFile);
+      resolve(filename);
     });
   });
 }

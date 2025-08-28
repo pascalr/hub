@@ -35,19 +35,19 @@ function getFilesList(dirPath, basePath) {
   return files;
 }
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   try {
 
     if (!fs.existsSync(MEDIA_DIR)) {
       return error(res, 500, "Internal server config error. Missing Media directory.", MEDIA_DIR)
     }
 
-    const files = getFilesList(fullPath, BASE_DIR);
+    const files = getFilesList(MEDIA_DIR, MEDIA_DIR);
 
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(files, null, 2));
 
-  } catch (error) {
-    return error(res, 500, error.message)
+  } catch (err) {
+    return error(res, 500, err.message)
   }
 }

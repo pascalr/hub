@@ -7,13 +7,15 @@ const {error} = require('./utils')
 const SUN_DIR = path.join(os.homedir(), 'Sun'); // TODO: Fetch this from a config file instead.
 const MEDIA_DIR = path.join(SUN_DIR, 'Media');
 
-async function getFilesList(dirPath, basePath) {
+function getFilesList(dirPath, basePath) {
   const entries = fs.readdirSync(dirPath, { withFileTypes: true });
   let files = [];
 
   for (const entry of entries) {
     const fullPath = path.join(dirPath, entry.name);
     const relativePath = path.relative(basePath, fullPath);
+
+    console.log('fullPath', fullPath)
 
     if (entry.isDirectory()) {
       // Recursively get files from subdirectory
@@ -32,6 +34,8 @@ async function getFilesList(dirPath, basePath) {
     }
   }
 
+  console.log('files', files)
+
   return files;
 }
 
@@ -42,7 +46,7 @@ module.exports = async (req, res) => {
       return error(res, 500, "Internal server config error. Missing Media directory.", MEDIA_DIR)
     }
 
-    const files = await getFilesList(MEDIA_DIR, MEDIA_DIR);
+    const files = getFilesList(MEDIA_DIR, MEDIA_DIR);
 
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(files, null, 2));

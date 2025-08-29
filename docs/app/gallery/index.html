@@ -108,7 +108,7 @@
         img.alt = it.name || '';
         img.loading = 'lazy';
         img.decoding = 'async';
-        img.dataset.src = "/Sun/Cache/"+it.thumb; // lazy src
+        img.dataset.src = `/thumb?media=${encodeURIComponent(it.path)}`; // lazy src
         img.onerror = () => { img.alt = 'Thumbnail unavailable'; };
 
         thumbWrap.appendChild(img);
@@ -147,9 +147,8 @@
         // Normalize fields defensively
         state.items = data.map(x => ({
           name: String(x.name ?? ''),
-          thumb: String(x.thumb ?? ''),
           path: String(x.path ?? x.url ?? ''),
-        })).filter(x => x.thumb && x.path);
+        }))//.filter(x => x.name && x.path);
 
         applyFilter();
       } catch (err) {

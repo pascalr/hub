@@ -3,7 +3,9 @@ const path = require('path');
 
 const {error, mimeType} = require('../utils')
 
-module.exports = (req, res, baseDir, filePath) => {
+module.exports = (req, res, baseDir, relPathUrl) => {
+
+  let filePath = path.join(baseDir, decodeURIComponent(relPathUrl))
 
   // Prevent directory traversal attacks
   if (!filePath.startsWith(baseDir)) {

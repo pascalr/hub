@@ -3,7 +3,7 @@ const path = require('path');
 
 const {error} = require('../utils')
 
-function getFilesList(dirPath, basePath) {
+function getFilesList(dirPath, basePath, baseURL) {
   const entries = fs.readdirSync(dirPath, { withFileTypes: true });
   let files = [];
 
@@ -15,9 +15,9 @@ function getFilesList(dirPath, basePath) {
 
     if (entry.isDirectory()) {
       // Recursively get files from subdirectory
-      files = files.concat(getFilesList(fullPath, basePath));
+      files = files.concat(getFilesList(fullPath, basePath, baseURL));
     } else {
-      files.push({
+      let e = {
         name: entry.name,
         path: relativePath,
         // parent: path.dirname(relativePath)
@@ -26,7 +26,11 @@ function getFilesList(dirPath, basePath) {
         // modifiedAt: stats.mtime, // last modified
         // isSymbolicLink: entry.isSymbolicLink(),
         // mode: stats.mode // file permissions
-      });
+      }
+      if (baseURL) {
+        e.url = baseURL + encodeURIComponent(relativePath)
+      }
+      files.push(e);
     }
   }
 
@@ -35,14 +39,14 @@ function getFilesList(dirPath, basePath) {
   return files;
 }
 
-module.exports = async (req, res, directory) => {
+module.exports = async (req, res, directory, baseURL) => {
   try {
 
     if (!fs.existsSync(directory)) {
       return error(res, 500, "Internal server config error. Missing Media directory.", directory)
     }
 
-    const files = getFilesList(directory, directory);
+    const files = getFilesList(directory, directory, baseURL);
 
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(files, null, 2));

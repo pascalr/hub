@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Music Player</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --card: #171a21;
+      --text: #e8eaf0;
+      --muted: #9aa3b2;
+      --accent: #6ea8fe;
+      --accent-2: #2dd4bf;
+      --border: #262b36;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: saturate(1.2) blur(6px);
+      background: color-mix(in oklab, var(--bg) 80%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 16px; }
+    .player {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+    .now-playing {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      min-height: 56px;
+      display: grid;
+      align-content: center;
+    }
+    .title { font-weight: 600; }
+    .sub { color: var(--muted); font-size: 0.9rem; margin-top: 2px; }
+
+    .controls { display: flex; gap: 8px; flex-wrap: wrap; }
+    button {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button:hover { border-color: var(--accent); }
+    button[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+    main .list {
+      margin-top: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 14px;
+      border-top: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .row:first-child { border-top: none; }
+    .row:hover { background: #1b202b; }
+    .row.active { background: linear-gradient(90deg, color-mix(in oklab, var(--accent) 20%, transparent), transparent 50%); }
+    .idx {
+      width: 2rem; text-align: right; color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .badge {
+      font-size: 0.75rem; color: var(--muted);
+      padding: 2px 8px; border: 1px solid var(--border); border-radius: 999px;
+    }
+
+    .empty, .error { color: var(--muted); padding: 24px; text-align: center; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container player">
+      <div class="now-playing">
+        <div class="title" id="nowTitle">Nothing playing</div>
+        <div class="sub" id="nowSub">Select a track below to start</div>
+      </div>
+      <div class="controls">
+        <button id="btnPlay" title="Play / Resume (Space)">▶️ Play</button>
+        <button id="btnPause" title="Pause">⏸️ Pause</button>
+        <button id="btnStop" title="Stop">⏹️ Stop</button>
+        <button id="btnPrev" title="Previous (J)">⏮️ Prev</button>
+        <button id="btnNext" title="Next (K)">⏭️ Next</button>
+        <span class="badge" id="statusBadge">stopped</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="list" id="list">
+      <div class="empty">Loading…</div>
+    </div>
+  </main>
+
+  <audio id="audio" class="sr-only" preload="metadata"></audio>
+
+  <script>
+    // --- State ---
+    let tracks = [];
+    let currentIndex = -1;
+    const audio = document.getElementById('audio');
+
+    // --- Elements ---
+    const listEl = document.getElementById('list');
+    const nowTitle = document.getElementById('nowTitle');
+    const nowSub = document.getElementById('nowSub');
+    const statusBadge = document.getElementById('statusBadge');
+    const btnPlay = document.getElementById('btnPlay');
+    const btnPause = document.getElementById('btnPause');
+    const btnStop = document.getElementById('btnStop');
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+
+    // --- Helpers ---
+    const fmt = new Intl.ListFormat(undefined, { style: 'short', type: 'conjunction' });
+
+    function setStatus(text) { statusBadge.textContent = text; }
+
+    function renderList() {
+      if (!tracks.length) {
+        listEl.innerHTML = '<div class="empty">No tracks found.</div>';
+        return;
+      }
+
+      const frag = document.createDocumentFragment();
+      tracks.forEach((t, i) => {
+        const row = document.createElement('div');
+        row.className = 'row' + (i === currentIndex ? ' active' : '');
+        row.dataset.index = i;
+        row.innerHTML = `
+          <div class="idx">${(i+1).toString().padStart(2, '0')}</div>
+          <div class="name" title="${t.name}">${t.name}</div>
+          <div class="badge">${t.ext || ''}</div>
+        `;
+        row.addEventListener('click', () => playIndex(i));
+        frag.appendChild(row);
+      });
+
+      listEl.innerHTML = '';
+      listEl.appendChild(frag);
+    }
+
+    function highlightActive() {
+      [...listEl.querySelectorAll('.row')].forEach(el => el.classList.remove('active'));
+      const active = listEl.querySelector(`.row[data-index="${currentIndex}"]`);
+      if (active) active.classList.add('active');
+    }
+
+    function setNow(t) {
+      nowTitle.textContent = t ? t.name : 'Nothing playing';
+      nowSub.textContent = t ? (t.path || '') : 'Select a track below to start';
+    }
+
+    async function fetchList() {
+      try {
+        const res = await fetch('/music_list', { headers: { 'Accept': 'application/json' } });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        // Expecting: [{ name, path, url }]
+        tracks = Array.isArray(data) ? data.slice() : [];
+        tracks.sort((a, b) => (a.name || '').localeCompare(b.name || '', undefined, { sensitivity: 'base' }));
+        tracks = tracks.map(t => ({ ...t, ext: (t.name?.split('.').pop() || '').toUpperCase() }));
+        renderList();
+      } catch (e) {
+        console.error(e);
+        listEl.innerHTML = `<div class="error">Failed to load /music_list (${e.message}).</div>`;
+      }
+    }
+
+    function playIndex(i) {
+      if (i < 0 || i >= tracks.length) return;
+      currentIndex = i;
+      const t = tracks[i];
+      setNow(t);
+      audio.src = t.url;
+      audio.play().then(() => {
+        setStatus('playing');
+        highlightActive();
+      }).catch(err => {
+        console.error('Play failed:', err);
+        setStatus('error');
+      });
+    }
+
+    function playNext(step = 1) {
+      if (!tracks.length) return;
+      const next = currentIndex < 0 ? 0 : (currentIndex + step + tracks.length) % tracks.length;
+      playIndex(next);
+    }
+
+    // --- Controls ---
+    btnPlay.addEventListener('click', () => {
+      if (currentIndex === -1) playNext(0);
+      else audio.paused ? audio.play().then(() => setStatus('playing')) : null;
+    });
+    btnPause.addEventListener('click', () => { audio.pause(); setStatus('paused'); });
+    btnStop.addEventListener('click', () => { audio.pause(); audio.currentTime = 0; setStatus('stopped'); });
+    btnPrev.addEventListener('click', () => playNext(-1));
+    btnNext.addEventListener('click', () => playNext(1));
+
+    // Keyboard shortcuts: Space to play/pause, J/K prev/next
+    window.addEventListener('keydown', (e) => {
+      if (['INPUT','TEXTAREA'].includes(e.target.tagName)) return;
+      if (e.code === 'Space') { e.preventDefault(); if (audio.paused) btnPlay.click(); else btnPause.click(); }
+      if (e.key.toLowerCase() === 'j') { btnPrev.click(); }
+      if (e.key.toLowerCase() === 'k') { btnNext.click(); }
+    });
+
+    // Audio events
+    audio.addEventListener('ended', () => { setStatus('ended'); playNext(1); });
+    audio.addEventListener('playing', () => setStatus('playing'));
+    audio.addEventListener('pause', () => { if (audio.currentTime > 0) setStatus('paused'); });
+    audio.addEventListener('stalled', () => setStatus('buffering'));
+    audio.addEventListener('waiting', () => setStatus('buffering'));
+
+    // Init
+    fetchList();
+  </script>
+</body>
+</html>

@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const handleMediaTree = require('./media_tree')
-const handleMediaList = require('./media_list')
+const handleMediaTree = require('./route/media_tree')
+const handleMediaList = require('./route/media_list')
 const handleThumbnail = require('./route/thumb')
 
 const {error, mimeType} = require('./utils')

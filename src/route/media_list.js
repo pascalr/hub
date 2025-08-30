@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const {error} = require('./utils')
-const config = require('./config');
+const {error} = require('../utils')
+const config = require('../config');
 
 const MEDIA_DIR = config.directory_media
 

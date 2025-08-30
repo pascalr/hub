@@ -1,3 +1,8 @@
+// ***********
+// NOT USED
+// But kept in case, I will need a tree for file manager
+// ***********
+
 const fs = require('fs');
 const path = require('path');
 const os = require('os');

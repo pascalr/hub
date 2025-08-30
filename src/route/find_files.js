@@ -2,9 +2,6 @@ const fs = require('fs');
 const path = require('path');
 
 const {error} = require('../utils')
-const config = require('../config');
-
-const MEDIA_DIR = config.directory_media
 
 function getFilesList(dirPath, basePath) {
   const entries = fs.readdirSync(dirPath, { withFileTypes: true });
@@ -38,14 +35,14 @@ function getFilesList(dirPath, basePath) {
   return files;
 }
 
-module.exports = async (req, res) => {
+module.exports = async (req, res, directory) => {
   try {
 
-    if (!fs.existsSync(MEDIA_DIR)) {
-      return error(res, 500, "Internal server config error. Missing Media directory.", MEDIA_DIR)
+    if (!fs.existsSync(directory)) {
+      return error(res, 500, "Internal server config error. Missing Media directory.", directory)
     }
 
-    const files = getFilesList(MEDIA_DIR, MEDIA_DIR);
+    const files = getFilesList(directory, directory);
 
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(files, null, 2));

@@ -1,7 +1,7 @@
 const path = require('path');
 
 const handleMediaTree = require('./route/media_tree')
-const handleMediaList = require('./route/media_list')
+const handleFindFiles = require('./route/find_files')
 const handleThumbnail = require('./route/thumb')
 const handleFile = require('./route/file')
 
@@ -9,6 +9,8 @@ const {error} = require('./utils')
 const config = require('./config');
 
 const FILES_DIR = config.directory_files
+const MUSICS_DIR = config.directory_musics
+const MEDIA_DIR = config.directory_media
 
 const docsDir = path.join(__dirname, '..', 'docs');
 
@@ -22,7 +24,10 @@ module.exports = async (req, res) => {
       return handleMediaTree(req, res)
     }
     if (pathname === '/media_list') {
-      return await handleMediaList(req, res)
+      return await handleFindFiles(req, res, MEDIA_DIR)
+    }
+    if (pathname === '/music_list') {
+      return await handleFindFiles(req, res, MUSICS_DIR)
     }
     if (pathname === '/thumb') {
       return await handleThumbnail(req, res)
@@ -30,6 +35,8 @@ module.exports = async (req, res) => {
 
     if (pathname.startsWith('/files')) {
       return handleFile(req, res, FILES_DIR, pathname.slice(6))
+    } else if (pathname.startsWith('/musics')) {
+        return handleFile(req, res, MUSICS_DIR, pathname.slice(7))
     } else {
       // Default to index.html if root is requested
       return handleFile(req, res, docsDir, path.join(docsDir, req.url === '/' ? 'index.html' : req.url))

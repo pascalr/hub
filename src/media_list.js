@@ -1,11 +1,10 @@
 const fs = require('fs');
 const path = require('path');
-const os = require('os');
 
 const {error} = require('./utils')
+const config = require('./config');
 
-const SUN_DIR = path.join(os.homedir(), 'Sun'); // TODO: Fetch this from a config file instead.
-const MEDIA_DIR = path.join(SUN_DIR, 'Media');
+const MEDIA_DIR = config.directory_media
 
 function getFilesList(dirPath, basePath) {
   const entries = fs.readdirSync(dirPath, { withFileTypes: true });

@@ -2,14 +2,13 @@
 
 const fs = require('fs');
 const path = require('path');
-const os = require('os');
 const { exec } = require('child_process');
 
-const {error, getCacheFileName, mimeType, getQueryPath} = require('../utils')
+const {error, getCacheFileName, mimeType, getQueryPath} = require('../utils');
+const config = require('../config');
 
-const SUN_DIR = path.join(os.homedir(), 'Sun'); // TODO: Fetch this from a config file instead.
-const MEDIA_DIR = path.join(SUN_DIR, 'Media');
-const CACHE_DIR = path.join(SUN_DIR, 'Cache');
+const MEDIA_DIR = config.directory_media
+const CACHE_DIR = config.directory_cache
 
 /**
  * Get thumbnail path from cache or create it.

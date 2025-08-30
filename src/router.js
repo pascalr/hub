@@ -6,14 +6,14 @@ const handleMediaList = require('./route/media_list')
 const handleThumbnail = require('./route/thumb')
 
 const {error, mimeType} = require('./utils')
+const config = require('./config');
+
+const FILES_DIR = config.directory_files
 
 const docsDir = path.join(__dirname, '..', 'docs');
 
 module.exports = async (req, res) => {
   try {
-    // Default to index.html if root is requested
-    let filePath = path.join(docsDir, req.url === '/' ? 'index.html' : req.url);
-
     // Extract pathname without query/hash
     const url = new URL(req.url, `http://${req.headers.host}`);
     const pathname = url.pathname;
@@ -28,8 +28,19 @@ module.exports = async (req, res) => {
       return await handleThumbnail(req, res)
     }
 
+    let baseDir = ''
+    let filePath = ''
+    if (pathname.startsWith('/files')) {
+      baseDir = FILES_DIR
+      filePath = path.join(baseDir, pathname.slice(6));
+    } else {
+      baseDir = docsDir
+      // Default to index.html if root is requested
+      filePath = path.join(baseDir, req.url === '/' ? 'index.html' : req.url);
+    }
+
     // Prevent directory traversal attacks
-    if (!filePath.startsWith(docsDir)) {
+    if (!filePath.startsWith(baseDir)) {
       return error(res, 403, 'Access denied', filePath)
     }
 
